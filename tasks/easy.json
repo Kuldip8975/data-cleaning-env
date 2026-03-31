@@ -1,0 +1,32 @@
+[
+  {
+    "id": "easy_1",
+    "description": "Fix extra spaces and capitalize first letter",
+    "input": "  hello   world  ",
+    "expected_output": "Hello world"
+  },
+  {
+    "id": "easy_2",
+    "description": "Remove extra spaces between words",
+    "input": "the   quick   brown   fox",
+    "expected_output": "The quick brown fox"
+  },
+  {
+    "id": "easy_3",
+    "description": "Fix capitalization of a name",
+    "input": "  my name is john doe  ",
+    "expected_output": "My name is john doe"
+  },
+  {
+    "id": "easy_4",
+    "description": "Strip leading/trailing whitespace and capitalize",
+    "input": "   python is great   ",
+    "expected_output": "Python is great"
+  },
+  {
+    "id": "easy_5",
+    "description": "Clean up messy spacing in a sentence",
+    "input": "  data  cleaning  is  important  ",
+    "expected_output": "Data cleaning is important"
+  }
+]

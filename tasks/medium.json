@@ -1,0 +1,32 @@
+[
+  {
+    "id": "medium_1",
+    "description": "Fix a broken email address and trim spaces",
+    "input": "  contact me at john..doe@@gmail..com  ",
+    "expected_output": "contact me at john.doe@gmail.com"
+  },
+  {
+    "id": "medium_2",
+    "description": "Fix punctuation: remove double periods and extra commas",
+    "input": "Hello.. my name is Jane,, and I like coding..",
+    "expected_output": "Hello. my name is Jane, and I like coding."
+  },
+  {
+    "id": "medium_3",
+    "description": "Fix malformed email in a sentence",
+    "input": "Send report to alice@@company..org by friday",
+    "expected_output": "Send report to alice@company.org by friday"
+  },
+  {
+    "id": "medium_4",
+    "description": "Remove duplicate punctuation marks",
+    "input": "Wait!! Are you sure??? This is great!!",
+    "expected_output": "Wait! Are you sure? This is great!"
+  },
+  {
+    "id": "medium_5",
+    "description": "Fix email with double @ and extra dots",
+    "input": "Email: support@@helpdesk..io for assistance",
+    "expected_output": "Email: support@helpdesk.io for assistance"
+  }
+]

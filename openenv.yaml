@@ -1,0 +1,87 @@
+# openenv.yaml
+# ─────────────────────────────────────────────────────────────
+# OpenEnv Environment Definition for Data Cleaning System
+# ─────────────────────────────────────────────────────────────
+
+name: data-cleaning-env
+version: "1.0.0"
+description: >
+  A real-world data cleaning environment where an AI agent learns
+  to clean messy text data. Supports three difficulty levels:
+  easy, medium, and hard.
+
+author: "Hackathon Team"
+license: MIT
+
+# ── Entry Point ───────────────────────────────────────────────
+entry_point:
+  module: env          # maps to env.py
+  class: DataCleaningEnv
+
+# ── Environment Parameters ────────────────────────────────────
+parameters:
+  difficulty:
+    type: string
+    default: easy
+    choices: [easy, medium, hard]
+    description: "Difficulty level of the cleaning task"
+
+# ── Action Space ──────────────────────────────────────────────
+action_space:
+  type: text           # agent submits a free-form cleaned string
+  description: "Cleaned version of the dirty input text"
+
+# ── Observation Space ─────────────────────────────────────────
+observation_space:
+  type: dict
+  fields:
+    dirty_input:
+      type: string
+      description: "Raw / messy input text for the agent to clean"
+    description:
+      type: string
+      description: "Human-readable description of the cleaning task"
+    difficulty:
+      type: string
+      description: "Current difficulty level"
+    done:
+      type: boolean
+      description: "Whether the current episode has ended"
+
+# ── Reward ────────────────────────────────────────────────────
+reward:
+  range: [0.0, 1.0]
+  values:
+    - value: 1.0
+      condition: "Agent output exactly matches expected output"
+    - value: 0.5
+      condition: "Agent output is ≥ 60% similar to expected output"
+    - value: 0.0
+      condition: "Agent output is wrong (< 60% similarity)"
+
+# ── Tasks ─────────────────────────────────────────────────────
+tasks:
+  - id: easy
+    file: tasks/easy.json
+    description: "Basic cleaning: strip spaces, fix capitalization"
+    num_tasks: 5
+
+  - id: medium
+    file: tasks/medium.json
+    description: "Fix emails, punctuation, duplicate characters"
+    num_tasks: 5
+
+  - id: hard
+    file: tasks/hard.json
+    description: "Missing values, combined multi-error cleaning"
+    num_tasks: 5
+
+# ── Inference ─────────────────────────────────────────────────
+inference:
+  script: inference.py
+  agent: RuleBasedAgent
+
+# ── Docker ───────────────────────────────────────────────────
+docker:
+  image: python:3.10-slim
+  command: "python inference.py"

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "hard_1",
+    "description": "Fix missing values (N/A), extra spaces, and capitalization",
+    "input": "  name: N/A ,   age: 25 ,   city: N/A  ",
+    "expected_output": "name: unknown, age: 25, city: unknown"
+  },
+  {
+    "id": "hard_2",
+    "description": "Fix email, punctuation, spaces, and missing value",
+    "input": "  contact: bob@@mail..com ,,  phone: N/A ,,  city: new york  ",
+    "expected_output": "contact: bob@mail.com, phone: unknown, city: new york"
+  },
+  {
+    "id": "hard_3",
+    "description": "Replace nulls, fix spacing, fix punctuation",
+    "input": "product: NULL ,  price: $null ,  status: available  ",
+    "expected_output": "product: unknown, price: unknown, status: available"
+  },
+  {
+    "id": "hard_4",
+    "description": "Fix multiple errors: missing values, email, and duplicate punctuation",
+    "input": "  user: N/A ,,  email: test@@domain..com ,,  score: NULL  ",
+    "expected_output": "user: unknown, email: test@domain.com, score: unknown"
+  },
+  {
+    "id": "hard_5",
+    "description": "Clean dataset row with all types of errors",
+    "input": "  id: 101 ,  name: N/A ,  email: hr@@corp..net ,,  dept: NULL  ",
+    "expected_output": "id: 101, name: unknown, email: hr@corp.net, dept: unknown"
+  }
+]

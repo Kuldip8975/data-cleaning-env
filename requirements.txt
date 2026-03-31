@@ -1,0 +1,15 @@
+# requirements.txt
+# ─────────────────────────────────────────────────────────────
+# Minimal dependencies for the Data Cleaning OpenEnv project.
+# All packages are from the Python standard library EXCEPT
+# pyyaml (for reading openenv.yaml).
+# ─────────────────────────────────────────────────────────────
+
+# YAML parsing — used to load openenv.yaml
+pyyaml>=6.0
+
+# difflib is part of the standard library (no install needed)
+# json   is part of the standard library (no install needed)
+# re     is part of the standard library (no install needed)
+# random is part of the standard library (no install needed)
+# os     is part of the standard library (no install needed)
