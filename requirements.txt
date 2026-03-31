@@ -13,3 +13,5 @@ pyyaml>=6.0
 # re     is part of the standard library (no install needed)
 # random is part of the standard library (no install needed)
 # os     is part of the standard library (no install needed)
+gradio
+pyyaml
