@@ -3,8 +3,6 @@
 > An OpenEnv-compatible environment where an AI agent learns to clean real-world messy data.
 > Supports live text cleaning, CSV / Excel / TXT file upload, and full agent evaluation.
 
-![Try it](output_5.JPG)
-
 ---
 
 ## 📌 What This Project Does
