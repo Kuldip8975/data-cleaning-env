@@ -1,32 +1,83 @@
-# 🧹 Data Cleaning System — OpenEnv Environment
+# 🧹 Data Cleaning AI Agent
 
-> A real-world AI environment where an agent learns to clean messy text data.
-> Built for hackathons using the OpenEnv interface standard.
+> An OpenEnv-compatible environment where an AI agent learns to clean real-world messy data.
+> Supports live text cleaning, CSV / Excel / TXT file upload, and full agent evaluation.
+
+![Try it](output_5.JPG)
 
 ---
 
 ## 📌 What This Project Does
 
-This project simulates a **real-world data cleaning task**.  
-An AI agent receives dirty / messy text and must return the cleaned version.  
-The environment rewards the agent based on how close its output is to the correct answer.
+This project simulates a **real-world data cleaning task** as an OpenEnv environment.
+An AI agent receives dirty / messy text and must return the cleaned version.
+The environment rewards the agent based on how accurate its output is.
+
+**6 types of errors handled automatically:**
+- `NULL` / `N/A` / `NaN` / `none` → replaced with `unknown`
+- Broken emails like `bob@@gmail..com` → `bob@gmail.com`
+- Phone numbers like `98--765--43210` → `9876543210`
+- Date formats like `31/03/2026` → `31-03-2026`
+- Duplicate punctuation `!!` `??` `,,` → `!` `?` `,`
+- Extra whitespace and spacing issues
+
+---
+
+## 🖥️ Live Demo
+
+**Hugging Face Space:** [https://huggingface.co/spaces/KuldipD/data-cleaning-env](https://huggingface.co/spaces/KuldipD/data-cleaning-env)
+
+---
+
+## 📸 Screenshots
+
+### Try it — live text cleaning
+![output_1](https://github.com/user-attachments/assets/f5ae16c0-610f-4ced-bf42-bf0b6f35197c)
+
+
+### Upload file — CSV / Excel / TXT cleaning
+![output_2](https://github.com/user-attachments/assets/f8381bee-fdf6-42d0-899b-ad3c367dfe23)
+
+### Before vs after — row-by-row preview
+![output_3](https://github.com/user-attachments/assets/7af226c5-a2e8-4fe0-8ee7-e693aa074d8c)
+
+
+### Full evaluation — agent benchmark
+![output_4](https://github.com/user-attachments/assets/bf942ec9-6aaf-4afe-a40d-102b7b90abf4)
+
+
+### About — API docs and project info
+![output_5](https://github.com/user-attachments/assets/ba674446-7ce2-459a-9d73-8286224eb3bb)
+
+---
+
+## 📊 Agent Performance
+
+| Level | Score | Tasks |
+|-------|-------|-------|
+| Easy | 100% | 8/8 correct |
+| Medium | 81% | 5/8 correct |
+| Hard | 88% | 6/8 correct |
+| **Overall** | **90% — Grade A** | **19/24 correct** |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-data_cleaning_env/
+data-cleaning-env/
 │
+├── app.py              ← FastAPI web app (HTML UI + API endpoints)
 ├── env.py              ← Core OpenEnv environment (reset, step, state)
-├── inference.py        ← Rule-based AI agent + evaluation runner
+├── inference.py        ← Rule-based + LLM cleaning agent
+├── file_cleaner.py     ← CSV / Excel / TXT file cleaning module
 │
 ├── tasks/
-│   ├── easy.json       ← 5 easy tasks (spaces, capitalization)
-│   ├── medium.json     ← 5 medium tasks (emails, punctuation)
-│   └── hard.json       ← 5 hard tasks (missing values, combined errors)
+│   ├── easy.json       ← 8 easy tasks (spaces, capitalization)
+│   ├── medium.json     ← 8 medium tasks (emails, punctuation, dates)
+│   └── hard.json       ← 8 hard tasks (NULL values, combined errors)
 │
-├── openenv.yaml        ← Environment definition file
+├── openenv.yaml        ← OpenEnv environment definition
 ├── Dockerfile          ← Container definition
 ├── requirements.txt    ← Python dependencies
 └── README.md           ← This file
@@ -36,39 +87,39 @@ data_cleaning_env/
 
 ## 🧠 How the Environment Works
 
-### Interface
+```
+Dirty Input → env.reset() → Agent reads state
+           → Agent cleans text
+           → env.step(cleaned_text)
+           → Reward computed (0.0 / 0.5 / 1.0)
+           → Score printed
+```
+
+### OpenEnv Interface
 
 | Method | What it does |
 |--------|-------------|
 | `reset()` | Picks a random task, returns initial state |
-| `step(action)` | Agent submits cleaned text → returns `(state, reward, done, info)` |
-| `state()` | Returns current task info (dirty input, description, etc.) |
+| `step(action)` | Agent submits cleaned text → returns reward |
+| `state()` | Returns current task info |
 
 ### Reward System
 
 | Score | Condition |
 |-------|-----------|
-| **1.0** | Agent output exactly matches expected output |
-| **0.5** | Agent output is ≥ 60% similar (partial credit) |
-| **0.0** | Agent output is wrong |
-
-### Difficulty Levels
-
-| Level | Tasks |
-|-------|-------|
-| **Easy** | Strip spaces, fix capitalization |
-| **Medium** | Fix broken emails, duplicate punctuation |
-| **Hard** | Replace missing values (N/A, NULL), combined errors |
+| **1.0** | Exact match with expected output |
+| **0.5** | 60%+ similarity (partial credit) |
+| **0.0** | Wrong answer |
 
 ---
 
 ## ⚙️ Setup Instructions
 
 ### Prerequisites
-- Python 3.8 or higher
+- Python 3.10 or higher
 - pip
 
-### 1. Clone / Download the project
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/data-cleaning-env.git
@@ -81,153 +132,129 @@ cd data-cleaning-env
 pip install -r requirements.txt
 ```
 
-### 3. Run the agent
+### 3. Set environment variables
 
 ```bash
-python inference.py
+export API_BASE_URL=https://api.openai.com/v1
+export MODEL_NAME=gpt-4o-mini
+export HF_TOKEN=your_token_here
 ```
 
----
+### 4. Run the app
 
-## 🖥️ Example Output
-
+```bash
+python app.py
 ```
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-   DATA CLEANING ENVIRONMENT — AGENT INFERENCE
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
-============================================================
-  DIFFICULTY: EASY
-============================================================
+Open your browser at `http://localhost:7860`
 
-  Episode 1 — Task ID: easy_1
-  Dirty Input    : '  hello   world  '
-  Agent Output   : 'Hello world'
-  Expected Output: 'Hello world'
-  Reward         : 1.0  ✅ CORRECT
+### 5. Run inference only
 
-  Episode 2 — Task ID: easy_3
-  Dirty Input    : '  my name is john doe  '
-  Agent Output   : 'My name is john doe'
-  Expected Output: 'My name is john doe'
-  Reward         : 1.0  ✅ CORRECT
-
-  ...
-
-  Average Reward for EASY: 1.00 / 1.00
-
-──────────────────────────────────────────────────────────────
-  FINAL SUMMARY
-──────────────────────────────────────────────────────────────
-  EASY    : 1.00  [████████████████████]
-  MEDIUM  : 0.90  [██████████████████  ]
-  HARD    : 0.70  [██████████████      ]
-
-  Overall Score: 0.87 / 1.00
-──────────────────────────────────────────────────────────────
+```bash
+python inference.py --no-llm
 ```
 
 ---
 
 ## 🐳 Run with Docker
 
-### Build the image
-
 ```bash
+# Build
 docker build -t data-cleaning-env .
+
+# Run
+docker run -p 7860:7860 \
+  -e API_BASE_URL=https://api.openai.com/v1 \
+  -e MODEL_NAME=gpt-4o-mini \
+  -e HF_TOKEN=your_token_here \
+  data-cleaning-env
 ```
 
-### Run the container
+---
 
-```bash
-docker run data-cleaning-env
+## 🌐 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | Web UI |
+| `POST` | `/reset` | Reset environment, returns initial state |
+| `POST` | `/step` | Submit action, returns reward |
+| `GET` | `/state` | Get current environment state |
+| `GET` | `/health` | Health check — returns 200 |
+| `POST` | `/clean-text` | Clean a text string |
+| `POST` | `/clean-file` | Clean a CSV / Excel / TXT file |
+| `GET` | `/evaluate` | Run full agent benchmark |
+
+### Example — reset and step
+
+```python
+import requests
+
+# Reset
+state = requests.post("http://localhost:7860/reset",
+                       params={"difficulty": "hard"}).json()
+print(state["dirty_input"])
+
+# Step
+result = requests.post("http://localhost:7860/step",
+                        json={"action": "your cleaned text"}).json()
+print(result["reward"])
+```
+
+---
+
+## 📋 Inference Log Format
+
+The inference script emits structured JSON logs:
+
+```json
+{"event": "START", "task_id": "easy_1", "difficulty": "easy", "input": "  hello   world  "}
+{"event": "STEP",  "task_id": "easy_1", "action": "Hello world", "reward": 1.0, "done": true}
+{"event": "END",   "task_id": "easy_1", "final_reward": 1.0, "total_steps": 1}
+{"event": "SUMMARY", "scores": {"easy": 1.0, "medium": 0.81, "hard": 0.88}, "overall": 0.90}
 ```
 
 ---
 
 ## ☁️ Deploy to Hugging Face Spaces
 
-Follow these steps to deploy the project on [Hugging Face Spaces](https://huggingface.co/spaces):
+1. Go to [huggingface.co](https://huggingface.co) → New Space
+2. Name: `data-cleaning-env` → SDK: **Docker** → Public
+3. Upload all project files including `tasks/` folder
+4. Go to **Settings → Variables and secrets** and add:
 
-### Step 1 — Create a Hugging Face account
-Go to [huggingface.co](https://huggingface.co) and sign up for a free account.
-
-### Step 2 — Create a new Space
-1. Click your profile icon → **New Space**
-2. Give it a name (e.g., `data-cleaning-env`)
-3. Choose **Docker** as the SDK
-4. Set visibility to **Public**
-5. Click **Create Space**
-
-### Step 3 — Upload your files
-You can either:
-
-**Option A — Use the web interface:**
-1. Click **Files** tab in your Space
-2. Click **Add file → Upload files**
-3. Upload all project files including the `tasks/` folder
-
-**Option B — Use Git:**
-```bash
-git clone https://huggingface.co/spaces/YOUR_USERNAME/data-cleaning-env
-cd data-cleaning-env
-# Copy all your project files here
-git add .
-git commit -m "Initial commit"
-git push
+```
+API_BASE_URL = https://api.openai.com/v1
+MODEL_NAME   = gpt-4o-mini
+HF_TOKEN     = hf_xxxxxxxxxxxx   ← add as Secret
 ```
 
-### Step 4 — Add a Gradio UI (optional, for browser demo)
-
-Install gradio:
-```bash
-pip install gradio
-```
-
-Create `app.py`:
-```python
-import gradio as gr
-from env import DataCleaningEnv
-from inference import RuleBasedAgent
-
-agent = RuleBasedAgent()
-
-def clean_text(dirty_input, difficulty):
-    env = DataCleaningEnv(difficulty=difficulty)
-    env.current_task = {"id": "demo", "input": dirty_input,
-                        "expected_output": "", "description": "Live demo"}
-    cleaned = agent.clean(dirty_input)
-    return cleaned
-
-demo = gr.Interface(
-    fn=clean_text,
-    inputs=[
-        gr.Textbox(label="Dirty Input"),
-        gr.Dropdown(["easy", "medium", "hard"], label="Difficulty")
-    ],
-    outputs=gr.Textbox(label="Cleaned Output"),
-    title="Data Cleaning AI Agent"
-)
-demo.launch()
-```
-
-### Step 5 — Your Space is live!
-Visit `https://huggingface.co/spaces/YOUR_USERNAME/data-cleaning-env`
+5. Space builds automatically — live in 2-3 minutes
 
 ---
 
-## ✅ Hackathon Checklist
+## 🔧 Environment Variables
 
-- [x] `env.py` with `reset()`, `step()`, `state()`
-- [x] Reward system: 1.0 / 0.5 / 0.0
-- [x] 3 difficulty levels: easy, medium, hard
-- [x] Task JSON files with input + expected_output
-- [x] Rule-based AI agent in `inference.py`
-- [x] `openenv.yaml` environment definition
-- [x] `Dockerfile` (fully working)
-- [x] `requirements.txt`
-- [x] `README.md` with full instructions
-- [x] Hugging Face deployment guide
+| Variable | Type | Description |
+|----------|------|-------------|
+| `API_BASE_URL` | Variable | The API endpoint for the LLM |
+| `MODEL_NAME` | Variable | The model identifier for inference |
+| `HF_TOKEN` | **Secret** | Your Hugging Face API key |
+
+---
+
+## 📦 Requirements
+
+```
+fastapi
+uvicorn
+pydantic
+openai
+pandas
+openpyxl
+pyyaml
+python-multipart
+```
 
 ---
 
