@@ -1,16 +1,11 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools>=68.0"]
 build-backend = "setuptools.backends.legacy:build"
 
 [project]
 name = "data-cleaning-env"
 version = "1.0.0"
-description = "An OpenEnv data cleaning environment where an AI agent learns to clean real-world messy data."
-readme = "README.md"
-license = { text = "MIT" }
 requires-python = ">=3.10"
-keywords = ["openenv", "data-cleaning", "ai"]
-
 dependencies = [
     "openenv-core>=0.2.0",
     "fastapi",
@@ -26,14 +21,11 @@ dependencies = [
 [project.scripts]
 serve = "server.app:main"
 
-[tool.setuptools.packages.find]
-where = ["."]
-
 [openenv]
-name        = "data-cleaning-env"
-version     = "1.0.0"
+name = "data-cleaning-env"
+version = "1.0.0"
 entry_point = "env:DataCleaningEnv"
-inference   = "inference.py"
+inference = "inference.py"
 
 [openenv.action_space]
 type = "string"
@@ -42,6 +34,6 @@ type = "string"
 type = "object"
 
 [openenv.reward]
-type    = "float"
+type = "float"
 minimum = 0.0
 maximum = 1.0
