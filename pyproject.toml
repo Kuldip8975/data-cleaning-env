@@ -5,13 +5,14 @@ build-backend = "setuptools.backends.legacy:build"
 [project]
 name = "data-cleaning-env"
 version = "1.0.0"
-description = "An OpenEnv-compatible data cleaning environment where an AI agent learns to clean real-world messy data."
+description = "An OpenEnv data cleaning environment where an AI agent learns to clean real-world messy data."
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
-keywords = ["openenv", "data-cleaning", "ai", "reinforcement-learning"]
+keywords = ["openenv", "data-cleaning", "ai"]
 
 dependencies = [
+    "openenv-core>=0.2.0",
     "fastapi",
     "uvicorn",
     "pydantic",
@@ -22,12 +23,11 @@ dependencies = [
     "python-multipart",
 ]
 
-[project.optional-dependencies]
-dev = ["pytest", "httpx"]
+[project.scripts]
+serve = "server.app:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["*"]
 
 [openenv]
 name        = "data-cleaning-env"
