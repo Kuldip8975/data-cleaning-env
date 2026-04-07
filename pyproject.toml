@@ -20,12 +20,16 @@ dependencies = [
 
 [project.scripts]
 serve = "server.app:main"
+server = "server.app:main"
+start = "server.app:main"
+app = "server.app:main"
 
 [openenv]
 name = "data-cleaning-env"
 version = "1.0.0"
 entry_point = "env:DataCleaningEnv"
 inference = "inference.py"
+server = "server.app:main"
 
 [openenv.action_space]
 type = "string"
